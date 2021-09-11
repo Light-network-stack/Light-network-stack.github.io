@@ -1,5 +1,7 @@
 # Light Stack
 
+![Octocat](./rocket_Light_word.svg)
+
 Light is a compatible, high-performance and scalable user-level network stack.
 
 ## Contact
