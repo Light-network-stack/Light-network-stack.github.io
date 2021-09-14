@@ -39,7 +39,7 @@ See [Light log manual](/doc/light_log_manual.html).
 ### Test environment
 ```
 NIC: Intel 82599ES 10GbE
-CPU: Intel Xeon E5-2683 v4 @ 2.10GHz
+CPU: Intel Xeon E5-2683 v4 @ 2.10GHz (16 Cores)
 Memory: 128G DDR3
 ```
 
