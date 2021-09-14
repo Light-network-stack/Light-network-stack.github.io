@@ -1,6 +1,6 @@
 # Light Log Manual
 
-Light logs are based on [RSyslog](https://www.rsyslog.com/) and used for debug.
+Light logs are based on [RSyslog](https://www.rsyslog.com/) and used for debugging.
 Light logs should be disabled when using Light for high performance.
 
 
