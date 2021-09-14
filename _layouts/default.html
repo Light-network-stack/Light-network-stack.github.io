@@ -11,8 +11,9 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/image/favicon.png">
     {% include head-custom.html %}
+    <a name="top"></a>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-467MDDPDS8"></script>
     <script>
@@ -26,7 +27,9 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header">{{ site.title | default: site.github.repository_name }}</h1>
+        <a href="/">
+          <h1 class="header">{{ site.title | default: site.github.repository_name }}</h1>
+        </a>
         <p class="header">{{ site.description | default: site.github.project_tagline }}</p>
 
         <ul>
@@ -59,7 +62,9 @@
         <div class="parent">
           <script src="https://efreecode.com/js.js" id="eXF-junfeng-0" async defer></script>
           <div class="child">
-            <img src="/rocket_Light_small.jpg" alt="drawing" width="45"/>
+            <a href="#top">
+              <img src="/image/arrow-top-icon-png.png" alt="drawing" width="45"/>
+            </a>
           </div>
         </div>
         <!-- <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p> -->

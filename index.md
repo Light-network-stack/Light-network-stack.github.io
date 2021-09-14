@@ -1,7 +1,7 @@
 # Light Stack
 
 <!-- ![rocket_Light_word](./rocket_Light_word.svg) -->
-<img src="rocket_Light_word.png" alt="Light" width="126"/>
+<img src="/image/rocket_Light_word.png" alt="Light" width="126"/>
 
 Light is a compatible, high-performance and scalable user-level network stack.
 

@@ -1,70 +1,88 @@
-## Light日志系统
-###（日志系统仅用来调试，测性能时一定要disable）
+# Light Log Manual
 
-### 一、配置说明
-Light日志系统是基于syslog系统日志实现，现在的linux已改版为rsyslog，不过依然兼容syslog的配置。
- 
-#### 1. 添加rsyslog配置
-在`/etc/rsyslog.conf`写入如下
+Light logs are based on [RSyslog](https://www.rsyslog.com/) and used for debug.
+Light logs should be disabled when using Light for high performance.
 
+
+## Setup
+
+### (1) Create log directory
+```shell
+cd /var/log
+mkdir light
+sudo chown -R syslog:adm light # The group and user have to be changed
+```
+
+### (2) Modify RSyslog config file
+
+Open `/etc/rsyslog.conf` and add the following content:
 ```shell
 local7.debug			/var/log/light/light.log
 local7.info			/var/log/light/light_info.log
 local7.warn			/var/log/light/light_warn.log
 local7.err			/var/log/light/light_err.log
 ```
-每个文件就会包括对应log级别及以上的log日志，具体更加灵活的配置请自行查阅网上讲解
 
-#### 2. 创建并修改Light日志文件权限,执行如下命令
+Every file includes the logs at the same and higher severity levels.
 
+### (3) Restart RSyslog
 ```shell
-cd /var/log
-mkdir light
-sudo chown -R syslog:adm light //群组和用户必须修改才能正常工作
-```
-#### 3. 重启rsyslog
-```
 sudo service rsyslog restart
 ```
 
-### 二、 日志开关控制
 
-产生日志的分别是n个核运行的Light协议栈以及上层的应用程序，例如双核与nginx有三个进程会产生日志。
-#### 1. 对于Light协议栈的日志在`startCorex.sh`脚本中修改 -l 参数，此参数代表可以输出的日志级别，如果配置成5或5以上则代表不输出日志，如果配置成2代表只输出warn和error级别的日志，数字含义请见`三、2`
+## Configuration
 
-#### 2. 对于应用程序需要修改`light_h.c`文件中argv参数中-l的配置，同上；然后重新运行`build_light_module`即可，产生新的so库。 
+The Light stack and application can create logs, and we can configure the log severity level.
 
-### 三、主要接口说明
-#### 1. `light_log_init`设置log的输出方向
+There are 6 levels (from 0 to 5), i.e. `LIGHT_LOG_DEBUG, LIGHT_LOG_INFO, LIGHT_LOG_WARNING, LIGHT_LOG_ERR, LIGHT_LOG_CRIT, LIGHT_LOG_NONE`.
 
-输入如下
+### (1) Log level of Light
 
+Change the `log_level` parameter in the shell scripts of Light, such as `startFirstCore.sh`. 
+If the `log_level` is 2, the Light logs whose level are equal or higher than `LIGHT_LOG_WARNING` are enabled.
+If the `log_level` is 5, all Light logs are disabled. 
+
+### (2) Log level of applications
+
+Change the `APP_LOG_LEVEL` value in `light_h.c`. 
+If the `APP_LOG_LEVEL` is 2, the application logs whose level are equal or higher than `LIGHT_LOG_WARNING` are enabled.
+If the `APP_LOG_LEVEL` is 5, all application logs are disabled. 
+
+Then re-compile the Light FM:
+
+```shell
+sudo ./build_light_module.sh
 ```
-#define LOG_TO_STDOUT 0
-#define LOG_TO_SYSLOG 1
+
+
+## APIs
+
+### (1) `light_log_init()`
+Set the output location of logs, i.e. STDOUT and SYSLOG.
+
+```c
+void light_log_init(int loc)
 ```
 
-#### 2. `light_set_log_level`设置log输出级别
-```
-enum
-{
-	LIGHT_LOG_DEBUG,
-	LIGHT_LOG_INFO,
-	LIGHT_LOG_WARNING,
-	LIGHT_LOG_ERR,
-	LIGHT_LOG_CRIT,
-	LIGHT_LOG_NONE
-};
-```
-（分别对应0，1，2，3，4，5）
+#### Parameter:
+loc: the output location of logs. The value could be LOG_TO_STDOUT or LOG_TO_SYSLOG.
 
-如果输入`LIGHT_LOG_WARNING`，则输出`LIGHT_LOG_WARNING`级别及以上级别的log
+### (2) `light_log()`
+Add a log at a specific log level.
 
-### 3. 使用说明
-
+```c
+inline void light_log(int level, const char* format, ...)
 ```
-#ifdef DPDK_LINUX_INIT_LOG //通过宏定义开关
-    light_log_init(LOG_TO_SYSLOG);
-    light_set_log_level(LIGHT_LOG_WARNING);
-#endif
+
+#### Parameter:
+level: log level.
+
+format, ...: log content.
+
+#### Example:
+Add an info-level log “LOG_CONTENT”.
+
+```c
+light_log(LIGHT_LOG_INFO, "LOG_CONTENT\n");
 ```
