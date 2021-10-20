@@ -20,6 +20,7 @@ According to evaluation results, various kinds of legacy applications could run 
 In comparison with the latest kernel stack, Nginx on Light achieves up to 2.86× throughput and 78.2% lower tail latency (99.9th percentile) with 14 CPU cores.
 
 Light is open-source and released under GPL-2.0.
+Here is [the source code](https://github.com/Light-network-stack/Light).
 
 
 ## Quick Start
